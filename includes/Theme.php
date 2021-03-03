@@ -40,8 +40,8 @@ class Theme
 
         // Add core actions and filters
         $this->loader->add_action( 'login_enqueue_scripts', $this->backend, 'enqueueLoginStyling' );
-        $this->loader->add_filter('login_headerurl', $this->backend, 'getHomeUrl');
-        $this->loader->add_filter('login_headertext', $this->backend, 'getBlogInfo');
+        $this->loader->add_filter('login_headerurl', $this, 'getHomeUrl');
+        $this->loader->add_filter('login_headertext', $this, 'getBlogInfo');
         $this->loader->add_filter('login_message', $this->backend, 'displayLoginMessage');
         
         // Add acf specific actions and filters
@@ -50,6 +50,16 @@ class Theme
             $this->loader->add_action('init', $this->backend, 'loadCustomFields');
             $this->backend->addOptionsPage();
         endif;
+    }
+
+    public function getBlogInfo()
+    {
+        return \get_bloginfo();
+    }
+
+    public function getHomeUrl()
+    {
+        return \home_url();
     }
 
     private function addThemeSupports() {

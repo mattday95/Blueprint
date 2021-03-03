@@ -1,5 +1,7 @@
 <?php
+
 use Inc\Theme;
+
 // Import composer autoload functionality
 
 if( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' )):

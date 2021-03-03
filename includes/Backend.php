@@ -44,16 +44,6 @@ class Backend
         require_once(__DIR__ . '/partials/admin/login_message.php');
     }
 
-    public function getHomeUrl()
-    {
-        return \home_url();
-    }
-
-    public function getBlogInfo()
-    {
-        return \get_bloginfo();
-    }
-
     public function showAcfUI() {
         return $this->showAcfUI;
     }

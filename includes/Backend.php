@@ -64,6 +64,47 @@ class Backend
 
     }
 
+    public function removeLoginShake()
+    {
+        remove_action('login_footer', 'wp_shake_js', 12);
+    }
+
+    public function removeAdditionalCssOption($wp_customize)
+    {
+        $wp_customize->remove_section('custom_css');
+    }
+
+    public function addAdminBarMessage()
+    {
+        global $wp_admin_bar;
+    
+        if(getenv('WP_ENV') != 'staging') {
+            return false;
+        }
+    
+        $wp_admin_bar->add_node([
+            'id'    => 'env_notification',
+            'title' => require_once(__DIR__ . '/partials/admin/env_notification.php')
+        ]);
+    }
+
+    public function removeDashboardWidgets()
+    {
+        remove_meta_box('dashboard_recent_comments', 'dashboard', 'core');
+        remove_meta_box('dashboard_incoming_links', 'dashboard', 'core');
+        remove_meta_box('dashboard_plugins', 'dashboard', 'core');
+        remove_meta_box('dashboard_quick_press', 'dashboard', 'core');
+        remove_meta_box('dashboard_recent_drafts', 'dashboard', 'core');
+        remove_meta_box('dashboard_primary', 'dashboard', 'core');    
+        remove_meta_box('dashboard_secondary', 'dashboard', 'core');
+        remove_meta_box('yoast_db_widget', 'dashboard', 'normal');  
+    }
+
+    public function hideAdminThankyou()
+    {
+        return '';
+    }
+
     private function collectFields( ) {
 
         $fields = [];

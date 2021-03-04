@@ -34,6 +34,8 @@ class Theme
 
         // Initialise the front end of our site
         $this->frontend = new Frontend();
+
+        // Add front end actions and filters
         $this->loader->add_action('wp_enqueue_scripts', $this->frontend, 'enqueueScripts');
         $this->loader->add_filter('show_admin_bar', $this->frontend, 'showAdminBar');
     }
@@ -43,17 +45,24 @@ class Theme
         // Initialise the back end of our site
         $this->backend = new Backend();
 
-        // Add core actions and filters
-        $this->loader->add_action( 'login_enqueue_scripts', $this->backend, 'enqueueLoginStyling' );
+        // Login actions and filters
         $this->loader->add_filter('login_headerurl', $this, 'getHomeUrl');
         $this->loader->add_filter('login_headertext', $this, 'getBlogInfo');
         $this->loader->add_filter('login_message', $this->backend, 'displayLoginMessage');
-        
-        // Add acf specific actions and filters
+        $this->loader->add_action( 'login_enqueue_scripts', $this->backend, 'enqueueLoginStyling' );
+        $this->loader->add_action('login_footer', $this->backend, 'removeLoginShake');
+
+        // Admin actions and filters
+        $this->loader->add_action('wp_before_admin_bar_render', $this->backend, 'addAdminBarMessage', 999);
+        $this->loader->add_action('admin_init', $this->backend, 'removeDashboardWidgets');
+        $this->loader->add_action('customize_register', $this->backend, 'removeAdditionalCssOption');
+        $this->loader->add_filter('admin_footer_text', $this->backend, 'hideAdminThankyou');
+
+        // ACF actions and filters
         if($this->acfInstalled):
             $this->loader->add_filter('acf/settings/show_admin', $this->backend, 'showAcfUI');
             $this->loader->add_action('init', $this->backend, 'loadCustomFields');
-            $this->backend->addOptionsPage();
+            $this->loader->add_action('init', $this->backend, 'addOptionsPage');
         endif;
     }
 

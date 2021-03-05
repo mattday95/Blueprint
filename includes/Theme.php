@@ -28,6 +28,7 @@ class Theme
         $this->initBackend();
         $this->secureTheme();
         $this->addThemeSupports();
+        $this->getHelperFunctions();
     }
 
     private function initFrontend() {
@@ -79,6 +80,20 @@ class Theme
 
         // Add security related action hooks
         $this->loader->add_action('init', $this->security, 'disableEmojicons');
+    }
+
+    private function getHelperFunctions()
+    {
+        $helperPath = dirname(__FILE__).'/helpers/';
+        $helpers = new \DirectoryIterator($helperPath);
+
+        foreach ($helpers as $file) {
+
+            $filePath = $helperPath.$file->getFilename();
+            if (!$file->isDot()) {
+                require_once($filePath);
+            }
+        }
     }
 
     public function getBlogInfo()
